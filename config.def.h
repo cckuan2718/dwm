@@ -1,25 +1,31 @@
 /* See LICENSE file for copyright and license details. */
 
 /* appearance */
-static const unsigned int borderpx  = 1;        /* border pixel of windows */
+static const unsigned int borderpx  = 2;        /* border pixel of windows */
 static const unsigned int snap      = 32;       /* snap pixel */
 static const int showbar            = 1;        /* 0 means no bar */
 static const int topbar             = 1;        /* 0 means bottom bar */
-static const char *fonts[]          = { "monospace:size=10" };
-static const char dmenufont[]       = "monospace:size=10";
+static const char *fonts[]          = { "monospace:size=11" };
+static const char dmenufont[]       = "monospace:size=16";
 static const char col_gray1[]       = "#222222";
 static const char col_gray2[]       = "#444444";
 static const char col_gray3[]       = "#bbbbbb";
 static const char col_gray4[]       = "#eeeeee";
 static const char col_cyan[]        = "#005577";
+static const char norm_fg_color[]     = "#ebdbb2";
+static const char norm_bg_color[]     = "#282828";
+static const char norm_border_color[] = "#282828";
+static const char sel_fg_color[]      = "#282828";
+static const char sel_bg_color[]      = "#fabd2f";
+static const char sel_border_color[]  = "#fabd2f";
 static const char *colors[][3]      = {
 	/*               fg         bg         border   */
-	[SchemeNorm] = { col_gray3, col_gray1, col_gray2 },
-	[SchemeSel]  = { col_gray4, col_cyan,  col_cyan  },
+	[SchemeNorm] = { norm_fg_color, norm_bg_color, norm_border_color },
+	[SchemeSel]  = { sel_fg_color,  sel_bg_color,  sel_border_color  },
 };
 
 /* tagging */
-static const char *tags[] = { "1", "2", "3", "4", "5", "6", "7", "8", "9" };
+static const char *tags[] = { "1", "2", "3", "4", "5" };
 
 static const Rule rules[] = {
 	/* xprop(1):
@@ -28,11 +34,11 @@ static const Rule rules[] = {
 	 */
 	/* class      instance    title       tags mask     isfloating   monitor */
 	{ "Gimp",     NULL,       NULL,       0,            1,           -1 },
-	{ "Firefox",  NULL,       NULL,       1 << 8,       0,           -1 },
+	{ "Firefox",  NULL,       NULL,       1 << 4,       0,           -1 },
 };
 
 /* layout(s) */
-static const float mfact     = 0.55; /* factor of master area size [0.05..0.95] */
+static const float mfact     = 0.65; /* factor of master area size [0.05..0.95] */
 static const int nmaster     = 1;    /* number of clients in master area */
 static const int resizehints = 1;    /* 1 means respect size hints in tiled resizals */
 
@@ -44,7 +50,7 @@ static const Layout layouts[] = {
 };
 
 /* key definitions */
-#define MODKEY Mod1Mask
+#define MODKEY Mod4Mask
 #define TAGKEYS(KEY,TAG) \
 	{ MODKEY,                       KEY,      view,           {.ui = 1 << TAG} }, \
 	{ MODKEY|ControlMask,           KEY,      toggleview,     {.ui = 1 << TAG} }, \
@@ -56,8 +62,37 @@ static const Layout layouts[] = {
 
 /* commands */
 static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
-static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", col_gray1, "-nf", col_gray3, "-sb", col_cyan, "-sf", col_gray4, NULL };
-static const char *termcmd[]  = { "st", NULL };
+static const char *dmenucmd[] = { "dmenu_run", NULL };
+static const char terminal[]  = "xterm";
+static const char *termcmd[]  = { terminal, NULL };
+
+/* Custom commands */
+static const char *backlight_dec_cmd[]          = { "backlightctl", "-d", NULL      };
+static const char *backlight_inc_cmd[]          = { "backlightctl", "-i", NULL      };
+static const char *displayctl_default_cmd[]     = { "displayctl", "oi", NULL        };
+static const char *displayctl_interactive_cmd[] = { "displayctl", "-i",  NULL       };
+static const char *dmenu_doc_cmd[]              = { "dmenu_doc", NULL               };
+static const char *dmenu_mount_cmd[]            = { "dmenu_mount", NULL             };
+static const char *dmenu_pass_cmd[]             = { "dmenu_pass", NULL              };
+static const char *dmenu_unicode_cmd[]          = { "dmenu_unicode", NULL           };
+static const char *dmenu_unmount_cmd[]          = { "dmenu_unmount", NULL           };
+static const char *email_client_cmd[]           = { terminal, "-e", "neomutt", NULL };
+static const char *htop_cmd[]                   = { terminal, "-e", "htop", NULL    };
+static const char *lockscreen_cmd[]             = { "powerctl", "lockscreen", NULL  };
+static const char *mpc_next_cmd[]               = { "mpc_wrapper", "next", NULL     };
+static const char *mpc_prev_cmd[]               = { "mpc_wrapper", "prev", NULL     };
+static const char *mpc_status_cmd[]             = { "mpc_wrapper", "status", NULL   };
+static const char *mpc_stop_cmd[]               = { "mpc_wrapper", "stop", NULL     };
+static const char *mpc_toggle_cmd[]             = { "mpc_wrapper", "toggle", NULL   };
+static const char *music_player_cmd[]           = { terminal, "-e", "ncmpcpp", NULL };
+static const char *powerctl_cmd[]               = { "powerctl", "-i", NULL          };
+static const char *screenshot_cmd[]             = { "screenshot", NULL              };
+static const char *screenshot_interactive_cmd[] = { "screenshot", "-i", NULL        };
+static const char *show_clipboard_cmd[]         = { "showclip", NULL                };
+static const char *volume_dec_cmd[]             = { "volumectl", "-d", NULL         };
+static const char *volume_inc_cmd[]             = { "volumectl", "-i", NULL         };
+static const char *volume_toggle_cmd[]          = { "volumectl", "-t", NULL         };
+static const char *www_browser_cmd[]            = { "firefox", NULL                 };
 
 static Key keys[] = {
 	/* modifier                     key        function        argument */
@@ -94,6 +129,35 @@ static Key keys[] = {
 	TAGKEYS(                        XK_8,                      7)
 	TAGKEYS(                        XK_9,                      8)
 	{ MODKEY|ShiftMask,             XK_q,      quit,           {0} },
+
+	/*  Custom key bindings */
+	{ MODKEY|ShiftMask, XK_BackSpace, spawn, {.v = powerctl_cmd }               },
+	{ MODKEY|ShiftMask, XK_l,         spawn, {.v = lockscreen_cmd }             },
+	{ MODKEY,           XK_minus,     spawn, {.v = volume_dec_cmd }             },
+	{ MODKEY,           XK_equal,     spawn, {.v = volume_inc_cmd }             },
+	{ MODKEY|ShiftMask, XK_m,         spawn, {.v = volume_toggle_cmd }          },
+	{ MODKEY|ShiftMask, XK_minus,     spawn, {.v = backlight_dec_cmd }          },
+	{ MODKEY|ShiftMask, XK_equal,     spawn, {.v = backlight_inc_cmd }          },
+	{ MODKEY,           XK_n,         spawn, {.v = mpc_status_cmd }             },
+	{ MODKEY|ShiftMask, XK_n,         spawn, {.v = music_player_cmd }           },
+	{ MODKEY,           XK_Up,        spawn, {.v = mpc_stop_cmd }               },
+	{ MODKEY,           XK_Down,      spawn, {.v = mpc_toggle_cmd }             },
+	{ MODKEY,           XK_Left,      spawn, {.v = mpc_prev_cmd }               },
+	{ MODKEY,           XK_Right,     spawn, {.v = mpc_next_cmd }               },
+	{ 0,                XK_Print,     spawn, {.v = screenshot_cmd }             },
+	{ ShiftMask,        XK_Print,     spawn, {.v = screenshot_interactive_cmd } },
+	{ MODKEY,           XK_grave,     spawn, {.v = dmenu_unicode_cmd }          },
+	{ MODKEY,           XK_F1,        spawn, {.v = dmenu_doc_cmd }              },
+	{ MODKEY,           XK_F7,        spawn, {.v = displayctl_interactive_cmd } },
+	{ MODKEY|ShiftMask, XK_F7,        spawn, {.v = displayctl_default_cmd }     },
+	{ MODKEY,           XK_F9,        spawn, {.v = dmenu_mount_cmd }            },
+	{ MODKEY,           XK_F10,       spawn, {.v = dmenu_unmount_cmd }          },
+	{ MODKEY|ShiftMask, XK_p,         spawn, {.v = dmenu_pass_cmd }             },
+	{ MODKEY|ShiftMask, XK_e,         spawn, {.v = email_client_cmd }           },
+	{ MODKEY|ShiftMask, XK_r,         spawn, {.v = htop_cmd }                   },
+	{ MODKEY,           XK_Insert,    spawn, {.v = show_clipboard_cmd }         },
+	{ MODKEY|ShiftMask, XK_w,         spawn, {.v = www_browser_cmd }            },
+	{ MODKEY,           XK_w,         view,  {.ui = 1 << 4}                     },
 };
 
 /* button definitions */
