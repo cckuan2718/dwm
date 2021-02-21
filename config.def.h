@@ -1,6 +1,7 @@
 /* See LICENSE file for copyright and license details. */
 
 #define TERMINAL "xterm"
+#define TERMCLASS "XTerm"
 
 /* appearance */
 static const unsigned int borderpx  = 2;        /* border pixel of windows */
@@ -37,6 +38,7 @@ static const Rule rules[] = {
 	/* class      instance    title       tags mask     iscentered   isfloating   monitor */
 	{ "Gimp",     NULL,       NULL,       0,            0,           1,           -1 },
 	{ "Firefox",  NULL,       NULL,       1 << 4,       0,           0,           -1 },
+	{ TERMCLASS,  "float",    NULL,       0,            1,           1,           -1 },
 };
 
 /* layout(s) */
@@ -68,32 +70,33 @@ static const char *dmenucmd[] = { "dmenu_run", NULL };
 static const char *termcmd[]  = { TERMINAL, NULL };
 
 /* Custom commands */
-static const char *backlight_dec_cmd[]          = { "backlightctl", "-d", NULL      };
-static const char *backlight_inc_cmd[]          = { "backlightctl", "-i", NULL      };
-static const char *displayctl_default_cmd[]     = { "displayctl", "oi", NULL        };
-static const char *displayctl_interactive_cmd[] = { "displayctl", "-i",  NULL       };
-static const char *dmenu_doc_cmd[]              = { "dmenu_doc", NULL               };
-static const char *dmenu_mount_cmd[]            = { "dmenu_mount", NULL             };
-static const char *dmenu_pass_cmd[]             = { "dmenu_pass", NULL              };
-static const char *dmenu_unicode_cmd[]          = { "dmenu_unicode", NULL           };
-static const char *dmenu_unmount_cmd[]          = { "dmenu_unmount", NULL           };
-static const char *email_client_cmd[]           = { TERMINAL, "-e", "neomutt", NULL };
-static const char *htop_cmd[]                   = { TERMINAL, "-e", "htop", NULL    };
-static const char *lockscreen_cmd[]             = { "powerctl", "lockscreen", NULL  };
-static const char *mpc_next_cmd[]               = { "mpc_wrapper", "next", NULL     };
-static const char *mpc_prev_cmd[]               = { "mpc_wrapper", "prev", NULL     };
-static const char *mpc_status_cmd[]             = { "mpc_wrapper", "status", NULL   };
-static const char *mpc_stop_cmd[]               = { "mpc_wrapper", "stop", NULL     };
-static const char *mpc_toggle_cmd[]             = { "mpc_wrapper", "toggle", NULL   };
-static const char *music_player_cmd[]           = { TERMINAL, "-e", "ncmpcpp", NULL };
-static const char *powerctl_cmd[]               = { "powerctl", "-i", NULL          };
-static const char *screenshot_cmd[]             = { "screenshot", NULL              };
-static const char *screenshot_interactive_cmd[] = { "screenshot", "-i", NULL        };
-static const char *show_clipboard_cmd[]         = { "showclip", NULL                };
-static const char *volume_dec_cmd[]             = { "volumectl", "-d", NULL         };
-static const char *volume_inc_cmd[]             = { "volumectl", "-i", NULL         };
-static const char *volume_toggle_cmd[]          = { "volumectl", "-t", NULL         };
-static const char *www_browser_cmd[]            = { "firefox", NULL                 };
+static const char *backlight_dec_cmd[]          = { "backlightctl", "-d", NULL                          };
+static const char *backlight_inc_cmd[]          = { "backlightctl", "-i", NULL                          };
+static const char *calculator_cmd[]             = { TERMINAL, "-name", "float", "-e", "bc", "-l",  NULL };
+static const char *displayctl_default_cmd[]     = { "displayctl", "oi", NULL                            };
+static const char *displayctl_interactive_cmd[] = { "displayctl", "-i",  NULL                           };
+static const char *dmenu_doc_cmd[]              = { "dmenu_doc", NULL                                   };
+static const char *dmenu_mount_cmd[]            = { "dmenu_mount", NULL                                 };
+static const char *dmenu_pass_cmd[]             = { "dmenu_pass", NULL                                  };
+static const char *dmenu_unicode_cmd[]          = { "dmenu_unicode", NULL                               };
+static const char *dmenu_unmount_cmd[]          = { "dmenu_unmount", NULL                               };
+static const char *email_client_cmd[]           = { TERMINAL, "-name", "float", "-e", "neomutt", NULL   };
+static const char *htop_cmd[]                   = { TERMINAL, "-name", "float", "-e", "htop", NULL      };
+static const char *lockscreen_cmd[]             = { "powerctl", "lockscreen", NULL                      };
+static const char *mpc_next_cmd[]               = { "mpc_wrapper", "next", NULL                         };
+static const char *mpc_prev_cmd[]               = { "mpc_wrapper", "prev", NULL                         };
+static const char *mpc_status_cmd[]             = { "mpc_wrapper", "status", NULL                       };
+static const char *mpc_stop_cmd[]               = { "mpc_wrapper", "stop", NULL                         };
+static const char *mpc_toggle_cmd[]             = { "mpc_wrapper", "toggle", NULL                       };
+static const char *music_player_cmd[]           = { TERMINAL, "-name", "float", "-e", "ncmpcpp", NULL   };
+static const char *powerctl_cmd[]               = { "powerctl", "-i", NULL                              };
+static const char *screenshot_cmd[]             = { "screenshot", NULL                                  };
+static const char *screenshot_interactive_cmd[] = { "screenshot", "-i", NULL                            };
+static const char *show_clipboard_cmd[]         = { "showclip", NULL                                    };
+static const char *volume_dec_cmd[]             = { "volumectl", "-d", NULL                             };
+static const char *volume_inc_cmd[]             = { "volumectl", "-i", NULL                             };
+static const char *volume_toggle_cmd[]          = { "volumectl", "-t", NULL                             };
+static const char *www_browser_cmd[]            = { "firefox", NULL                                     };
 
 static Key keys[] = {
 	/* modifier                     key        function        argument */
@@ -153,9 +156,10 @@ static Key keys[] = {
 	{ MODKEY|ShiftMask, XK_F7,        spawn, {.v = displayctl_default_cmd }     },
 	{ MODKEY,           XK_F9,        spawn, {.v = dmenu_mount_cmd }            },
 	{ MODKEY,           XK_F10,       spawn, {.v = dmenu_unmount_cmd }          },
-	{ MODKEY|ShiftMask, XK_p,         spawn, {.v = dmenu_pass_cmd }             },
-	{ MODKEY|ShiftMask, XK_e,         spawn, {.v = email_client_cmd }           },
-	{ MODKEY|ShiftMask, XK_r,         spawn, {.v = htop_cmd }                   },
+	{ MODKEY,           XK_p,         spawn, {.v = dmenu_pass_cmd }             },
+	{ MODKEY,           XK_e,         spawn, {.v = email_client_cmd }           },
+	{ MODKEY,           XK_r,         spawn, {.v = htop_cmd }                   },
+	{ MODKEY,           XK_c,         spawn, {.v = calculator_cmd }             },
 	{ MODKEY,           XK_Insert,    spawn, {.v = show_clipboard_cmd }         },
 	{ MODKEY|ShiftMask, XK_w,         spawn, {.v = www_browser_cmd }            },
 	{ MODKEY,           XK_w,         view,  {.ui = 1 << 4}                     },
