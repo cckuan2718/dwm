@@ -87,6 +87,7 @@ static const char *powerctl_cmd[]               = { "powerctl", "-i", NULL      
 static const char *screenshot_cmd[]             = { "screenshot", NULL                                     };
 static const char *screenshot_interactive_cmd[] = { "screenshot", "-i", NULL                               };
 static const char *show_clipboard_cmd[]         = { "showclip", NULL                                       };
+static const char *tmux_cmd[]                   = { TERMINAL, "-e", "tmux", "new-session", NULL            };
 static const char *top_cmd[]                    = { TERMINAL, "-name", "float", "-e", "top", NULL          };
 static const char *volume_dec_cmd[]             = { "volumectl", "-d", NULL                                };
 static const char *volume_inc_cmd[]             = { "volumectl", "-i", NULL                                };
@@ -157,6 +158,7 @@ static Key keys[] = {
 	{ MODKEY|ShiftMask, XK_minus,     spawn,     {.v = backlight_dec_cmd }          },
 	{ MODKEY|ShiftMask, XK_n,         spawn,     {.v = music_player_cmd }           },
 	{ MODKEY|ShiftMask, XK_p,         spawn,     {.v = dmenu_pass_cmd }             },
+	{ MODKEY|ShiftMask, XK_t,         spawn,     {.v = tmux_cmd }                   },
 	{ MODKEY|ShiftMask, XK_w,         spawn,     {.v = www_browser_cmd }            },
 	{ ShiftMask,        XK_Print,     spawn,     {.v = screenshot_interactive_cmd } },
 };
