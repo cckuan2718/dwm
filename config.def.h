@@ -31,9 +31,10 @@ static const Rule rules[] = {
 	 *	WM_NAME(STRING) = title
 	 */
 	/* class      instance    title       tags mask     iscentered   isfloating   monitor */
-	{ "Firefox",  NULL,       NULL,       1 << 4,       0,           0,           -1 },
-	{ TERMCLASS,  "float",    NULL,       0,            1,           1,           -1 },
-	{ TERMCLASS,  "tmuxwm",   NULL,       1 << 0,       1,           0,           -1 },
+	{ "Firefox",     NULL,       NULL,       1 << 4,       0,           0,           -1 },
+	{ "qutebrowser", NULL,       NULL,       1 << 4,       0,           0,           -1 },
+	{ TERMCLASS,     "float",    NULL,       0,            1,           1,           -1 },
+	{ TERMCLASS,     "tmuxwm",   NULL,       1 << 0,       1,           0,           -1 },
 };
 
 /* layout(s) */
@@ -93,7 +94,7 @@ static const char *top_cmd[]                    = { TERMINAL, "-name", "float", 
 static const char *volume_dec_cmd[]             = { "volumectl", "-d", NULL                                                      };
 static const char *volume_inc_cmd[]             = { "volumectl", "-i", NULL                                                      };
 static const char *volume_toggle_cmd[]          = { "volumectl", "-t", NULL                                                      };
-static const char *www_browser_cmd[]            = { "firefox", NULL                                                              };
+static const char *www_browser_cmd[]            = { "qutebrowser", NULL                                                          };
 
 static Key keys[] = {
 	/* modifier                     key        function        argument */
@@ -132,11 +133,12 @@ static Key keys[] = {
 	{ MODKEY|ShiftMask,             XK_q,      quit,           {0} },
 
 	/*  Custom key bindings */
+	{ 0,                XK_Menu,      spawn,     {.v = dmenu_open_documents_cmd }   },
 	{ 0,                XK_Print,     spawn,     {.v = screenshot_cmd }             },
 	{ MODKEY,           XK_Down,      spawn,     {.v = mpc_toggle_cmd }             },
 	{ MODKEY,           XK_F1,        spawn,     {.v = dmenu_open_downloads_cmd }   },
-	{ MODKEY,           XK_F2,        spawn,     {.v = dmenu_open_documents_cmd }   },
 	{ MODKEY,           XK_F10,       spawn,     {.v = dmenu_unmount_cmd }          },
+	{ MODKEY,           XK_F2,        spawn,     {.v = dmenu_open_documents_cmd }   },
 	{ MODKEY,           XK_F7,        spawn,     {.v = displayctl_interactive_cmd } },
 	{ MODKEY,           XK_F9,        spawn,     {.v = dmenu_mount_cmd }            },
 	{ MODKEY,           XK_Insert,    spawn,     {.v = show_clipboard_cmd }         },
@@ -162,6 +164,7 @@ static Key keys[] = {
 	{ MODKEY|ShiftMask, XK_p,         spawn,     {.v = dmenu_pass_cmd }             },
 	{ MODKEY|ShiftMask, XK_s,         spawn,     {.v = tmux_cmd }                   },
 	{ MODKEY|ShiftMask, XK_w,         spawn,     {.v = www_browser_cmd }            },
+	{ ShiftMask,        XK_Menu,      spawn,     {.v = dmenu_open_downloads_cmd }   },
 	{ ShiftMask,        XK_Print,     spawn,     {.v = screenshot_interactive_cmd } },
 };
 
