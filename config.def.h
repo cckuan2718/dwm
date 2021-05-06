@@ -32,7 +32,6 @@ static const Rule rules[] = {
 	 */
 	/* class      instance    title       tags mask     iscentered   isfloating   monitor */
 	{ "Firefox",     NULL,       NULL,       1 << 4,       0,           0,           -1 },
-	{ "qutebrowser", NULL,       NULL,       1 << 4,       0,           0,           -1 },
 	{ TERMCLASS,     "float",    NULL,       0,            1,           1,           -1 },
 	{ TERMCLASS,     "tmuxwm",   NULL,       1 << 0,       1,           0,           -1 },
 };
@@ -94,7 +93,7 @@ static const char *top_cmd[]                    = { TERMINAL, "-name", "float", 
 static const char *volume_dec_cmd[]             = { "volumectl", "-d", NULL                                                      };
 static const char *volume_inc_cmd[]             = { "volumectl", "-i", NULL                                                      };
 static const char *volume_toggle_cmd[]          = { "volumectl", "-t", NULL                                                      };
-static const char *www_browser_cmd[]            = { "qutebrowser", NULL                                                          };
+static const char *www_browser_cmd[]            = { "firefox", NULL                                                              };
 
 static Key keys[] = {
 	/* modifier                     key        function        argument */
