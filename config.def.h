@@ -34,6 +34,7 @@ static const Rule rules[] = {
 	{ "Firefox",     NULL,       NULL,       1 << 4,       0,           0,           -1 },
 	{ TERMCLASS,     "float",    NULL,       0,            1,           1,           -1 },
 	{ TERMCLASS,     "tmuxwm",   NULL,       1 << 0,       1,           0,           -1 },
+	{ "Emacs",       NULL,       NULL,       1 << 1,       1,           0,           -1 },
 };
 
 /* layout(s) */
