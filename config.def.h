@@ -62,7 +62,7 @@ static const Layout layouts[] = {
 
 /* commands */
 static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
-static const char *dmenucmd[] = { "dmenu_run", NULL };
+static const char *dmenucmd[] = { "dmenu_run", "-p", "run", NULL };
 static const char *termcmd[]  = { TERMINAL, NULL };
 
 /* Custom commands */
@@ -90,7 +90,6 @@ static const char *screenshot_cmd[]             = { "screenshot", NULL          
 static const char *screenshot_interactive_cmd[] = { "screenshot", "-i", NULL                                                     };
 static const char *show_clipboard_cmd[]         = { "showclip", NULL                                                             };
 static const char *tmux_cmd[]                   = { TERMINAL, "-name", "tmuxdef", "-e", "tmux", "new-session", "-As", "default",  NULL };
-static const char *top_cmd[]                    = { TERMINAL, "-name", "float", "-e", "top", NULL                                };
 static const char *volume_dec_cmd[]             = { "volumectl", "-d", NULL                                                      };
 static const char *volume_inc_cmd[]             = { "volumectl", "-i", NULL                                                      };
 static const char *volume_toggle_cmd[]          = { "volumectl", "-t", NULL                                                      };
@@ -98,20 +97,20 @@ static const char *www_browser_cmd[]            = { "firefox", NULL             
 
 static Key keys[] = {
 	/* modifier                     key        function        argument */
-	{ MODKEY,                       XK_p,      spawn,          {.v = dmenucmd } },
+	{ MODKEY,                       XK_r,      spawn,          {.v = dmenucmd } },
 	{ MODKEY|ShiftMask,             XK_Return, spawn,          {.v = termcmd } },
-	{ MODKEY,                       XK_b,      togglebar,      {0} },
-	{ MODKEY,                       XK_j,      focusstack,     {.i = +1 } },
-	{ MODKEY,                       XK_k,      focusstack,     {.i = -1 } },
-	{ MODKEY,                       XK_i,      incnmaster,     {.i = +1 } },
+	{ MODKEY,                       XK_h,      togglebar,      {0} },
+	{ MODKEY,                       XK_n,      focusstack,     {.i = +1 } },
+	{ MODKEY,                       XK_p,      focusstack,     {.i = -1 } },
+	{ MODKEY,                       XK_u,      incnmaster,     {.i = +1 } },
 	{ MODKEY,                       XK_d,      incnmaster,     {.i = -1 } },
-	{ MODKEY,                       XK_h,      setmfact,       {.f = -0.05} },
-	{ MODKEY,                       XK_l,      setmfact,       {.f = +0.05} },
+	{ MODKEY,                       XK_b,      setmfact,       {.f = -0.05} },
+	{ MODKEY,                       XK_f,      setmfact,       {.f = +0.05} },
 	{ MODKEY,                       XK_Return, zoom,           {0} },
 	{ MODKEY,                       XK_Tab,    view,           {0} },
 	{ MODKEY|ShiftMask,             XK_c,      killclient,     {0} },
 	{ MODKEY,                       XK_t,      setlayout,      {.v = &layouts[0]} },
-	{ MODKEY,                       XK_f,      setlayout,      {.v = &layouts[1]} },
+	/* { MODKEY,                       XK_f,      setlayout,      {.v = &layouts[1]} }, */
 	{ MODKEY,                       XK_m,      setlayout,      {.v = &layouts[2]} },
 	{ MODKEY,                       XK_space,  setlayout,      {0} },
 	{ MODKEY|ShiftMask,             XK_space,  togglefloating, {0} },
@@ -134,38 +133,36 @@ static Key keys[] = {
 
 	/*  Custom key bindings */
 	{ 0,                XK_Menu,      spawn,     {.v = dmenu_open_documents_cmd }   },
+	{ ShiftMask,        XK_Menu,      spawn,     {.v = dmenu_open_downloads_cmd }   },
 	{ 0,                XK_Print,     spawn,     {.v = screenshot_cmd }             },
-	{ MODKEY,           XK_Down,      spawn,     {.v = mpc_toggle_cmd }             },
-	{ MODKEY,           XK_F1,        spawn,     {.v = dmenu_open_downloads_cmd }   },
-	{ MODKEY,           XK_F10,       spawn,     {.v = dmenu_unmount_cmd }          },
-	{ MODKEY,           XK_F2,        spawn,     {.v = dmenu_open_documents_cmd }   },
+	{ ShiftMask,        XK_Print,     spawn,     {.v = screenshot_interactive_cmd } },
 	{ MODKEY,           XK_F7,        spawn,     {.v = displayctl_interactive_cmd } },
+	{ MODKEY|ShiftMask, XK_F7,        spawn,     {.v = displayctl_default_cmd }     },
 	{ MODKEY,           XK_F9,        spawn,     {.v = dmenu_mount_cmd }            },
+	{ MODKEY,           XK_F10,       spawn,     {.v = dmenu_unmount_cmd }          },
 	{ MODKEY,           XK_Insert,    spawn,     {.v = show_clipboard_cmd }         },
+	{ MODKEY,           XK_Down,      spawn,     {.v = mpc_toggle_cmd }             },
 	{ MODKEY,           XK_Left,      spawn,     {.v = mpc_prev_cmd }               },
 	{ MODKEY,           XK_Right,     spawn,     {.v = mpc_next_cmd }               },
 	{ MODKEY,           XK_Up,        spawn,     {.v = mpc_stop_cmd }               },
 	{ MODKEY,           XK_c,         spawn,     {.v = calculator_cmd }             },
-	{ MODKEY,           XK_e,         spawn,     {.v = emacs_cmd }                  },
-	{ MODKEY,           XK_equal,     spawn,     {.v = volume_inc_cmd }             },
 	{ MODKEY,           XK_grave,     spawn,     {.v = dmenu_unicode_cmd }          },
+	{ MODKEY,           XK_equal,     spawn,     {.v = volume_inc_cmd }             },
 	{ MODKEY,           XK_minus,     spawn,     {.v = volume_dec_cmd }             },
-	{ MODKEY,           XK_n,         spawn,     {.v = mpc_status_cmd }             },
-	{ MODKEY,           XK_r,         spawn,     {.v = top_cmd }                    },
-	{ MODKEY,           XK_s,         view,      {.ui = 1 << 0}                     },
-	{ MODKEY,           XK_w,         view,      {.ui = 1 << 4}                     },
+	{ MODKEY|ShiftMask, XK_F2,        spawn,     {.v = music_player_cmd }           },
+	{ MODKEY,           XK_F2,        spawn,     {.v = mpc_status_cmd }             },
 	{ MODKEY|ShiftMask, XK_BackSpace, spawn,     {.v = powerctl_cmd }               },
-	{ MODKEY|ShiftMask, XK_F7,        spawn,     {.v = displayctl_default_cmd }     },
-	{ MODKEY|ShiftMask, XK_equal,     spawn,     {.v = backlight_inc_cmd }          },
 	{ MODKEY|ShiftMask, XK_l,         spawn,     {.v = lockscreen_cmd }             },
 	{ MODKEY|ShiftMask, XK_m,         spawn,     {.v = volume_toggle_cmd }          },
+	{ MODKEY|ShiftMask, XK_equal,     spawn,     {.v = backlight_inc_cmd }          },
 	{ MODKEY|ShiftMask, XK_minus,     spawn,     {.v = backlight_dec_cmd }          },
-	{ MODKEY|ShiftMask, XK_n,         spawn,     {.v = music_player_cmd }           },
 	{ MODKEY|ShiftMask, XK_p,         spawn,     {.v = dmenu_pass_cmd }             },
 	{ MODKEY|ShiftMask, XK_s,         spawn,     {.v = tmux_cmd }                   },
+	{ MODKEY,           XK_s,         view,      {.ui = 1 << 0}                     },
+	{ MODKEY|ShiftMask, XK_e,         spawn,     {.v = emacs_cmd }                  },
+	{ MODKEY,           XK_e,         view,      {.ui = 1 << 1}                     },
 	{ MODKEY|ShiftMask, XK_w,         spawn,     {.v = www_browser_cmd }            },
-	{ ShiftMask,        XK_Menu,      spawn,     {.v = dmenu_open_downloads_cmd }   },
-	{ ShiftMask,        XK_Print,     spawn,     {.v = screenshot_interactive_cmd } },
+	{ MODKEY,           XK_w,         view,      {.ui = 1 << 4}                     },
 };
 
 /* button definitions */
