@@ -33,7 +33,7 @@ static const Rule rules[] = {
 	/* class      instance    title       tags mask     iscentered   isfloating   monitor */
 	{ "Firefox",     NULL,       NULL,       1 << 4,       0,           0,           -1 },
 	{ TERMCLASS,     "float",    NULL,       0,            1,           1,           -1 },
-	{ TERMCLASS,     "tmuxwm",   NULL,       1 << 0,       1,           0,           -1 },
+	{ TERMCLASS,     "tmuxdef",  NULL,       1 << 0,       1,           0,           -1 },
 	{ "Emacs",       NULL,       NULL,       1 << 1,       1,           0,           -1 },
 };
 
@@ -89,7 +89,7 @@ static const char *powerctl_cmd[]               = { "powerctl", "-i", NULL      
 static const char *screenshot_cmd[]             = { "screenshot", NULL                                                           };
 static const char *screenshot_interactive_cmd[] = { "screenshot", "-i", NULL                                                     };
 static const char *show_clipboard_cmd[]         = { "showclip", NULL                                                             };
-static const char *tmux_cmd[]                   = { TERMINAL, "-name", "tmuxwm", "-e", "tmux", "new-session", "-As", "wm",  NULL };
+static const char *tmux_cmd[]                   = { TERMINAL, "-name", "tmuxdef", "-e", "tmux", "new-session", "-As", "default",  NULL };
 static const char *top_cmd[]                    = { TERMINAL, "-name", "float", "-e", "top", NULL                                };
 static const char *volume_dec_cmd[]             = { "volumectl", "-d", NULL                                                      };
 static const char *volume_inc_cmd[]             = { "volumectl", "-i", NULL                                                      };
