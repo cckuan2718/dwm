@@ -23,7 +23,7 @@ static const char *colors[][3]      = {
 };
 
 /* tagging */
-static const char *tags[] = { "1", "2", "3", "4", "5" };
+static const char *tags[] = { "", "", "", "", "" };
 
 static const Rule rules[] = {
 	/* xprop(1):
@@ -31,7 +31,7 @@ static const Rule rules[] = {
 	 *	WM_NAME(STRING) = title
 	 */
 	/* class      instance    title       tags mask     iscentered   isfloating   monitor */
-	{ "Firefox",     NULL,       NULL,       1 << 4,       0,           0,           -1 },
+	{ "Luakit",      NULL,       NULL,       1 << 4,       0,           0,           -1 },
 	{ TERMCLASS,     "float",    NULL,       0,            1,           1,           -1 },
 	{ TERMCLASS,     "tmuxdef",  NULL,       1 << 0,       1,           0,           -1 },
 	{ "Emacs",       NULL,       NULL,       1 << 1,       1,           0,           -1 },
@@ -93,7 +93,7 @@ static const char *tmux_cmd[]                   = { TERMINAL, "-name", "tmuxdef"
 static const char *volume_dec_cmd[]             = { "volumectl", "-d", NULL                                                      };
 static const char *volume_inc_cmd[]             = { "volumectl", "-i", NULL                                                      };
 static const char *volume_toggle_cmd[]          = { "volumectl", "-t", NULL                                                      };
-static const char *www_browser_cmd[]            = { "firefox", NULL                                                              };
+static const char *www_browser_cmd[]            = { "luakit", NULL                                                               };
 
 static Key keys[] = {
 	/* modifier                     key        function        argument */
@@ -149,8 +149,8 @@ static Key keys[] = {
 	{ MODKEY,           XK_grave,     spawn,     {.v = dmenu_unicode_cmd }          },
 	{ MODKEY,           XK_equal,     spawn,     {.v = volume_inc_cmd }             },
 	{ MODKEY,           XK_minus,     spawn,     {.v = volume_dec_cmd }             },
-	{ MODKEY|ShiftMask, XK_F2,        spawn,     {.v = music_player_cmd }           },
-	{ MODKEY,           XK_F2,        spawn,     {.v = mpc_status_cmd }             },
+	{ MODKEY|ShiftMask, XK_F6,        spawn,     {.v = music_player_cmd }           },
+	{ MODKEY,           XK_F6,        spawn,     {.v = mpc_status_cmd }             },
 	{ MODKEY|ShiftMask, XK_BackSpace, spawn,     {.v = powerctl_cmd }               },
 	{ MODKEY|ShiftMask, XK_l,         spawn,     {.v = lockscreen_cmd }             },
 	{ MODKEY|ShiftMask, XK_m,         spawn,     {.v = volume_toggle_cmd }          },
