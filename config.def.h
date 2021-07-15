@@ -34,7 +34,7 @@ static const Rule rules[] = {
 	{ "Luakit",      NULL,       NULL,       1 << 4,       0,           0,           -1 },
 	{ TERMCLASS,     "float",    NULL,       0,            1,           1,           -1 },
 	{ TERMCLASS,     "tmuxdef",  NULL,       1 << 0,       1,           0,           -1 },
-	{ "Emacs",       NULL,       NULL,       1 << 1,       1,           0,           -1 },
+	{ "Emacs",       NULL,       "default",  1 << 1,       1,           0,           -1 },
 };
 
 /* layout(s) */
@@ -77,7 +77,8 @@ static const char *dmenu_open_downloads_cmd[]   = { "/bin/sh", "-c", "dmenu_open
 static const char *dmenu_pass_cmd[]             = { "dmenu_pass", NULL                                                           };
 static const char *dmenu_unicode_cmd[]          = { "dmenu_unicode", NULL                                                        };
 static const char *dmenu_unmount_cmd[]          = { "dmenu_unmount", NULL                                                        };
-static const char *emacs_cmd[]                  = { "emacsclient", "-c", "-a", "", NULL                                          };
+static const char *emacs_cmd[]                  = { "emacsclient", "-c", "-F", "((name . \"default\"))", "-a", "", NULL          };
+static const char *mail_cmd[]                   = { "emacsclient", "-c", "-a", "", "-e", "(mu4e)", NULL                          };
 static const char *lockscreen_cmd[]             = { "powerctl", "lockscreen", NULL                                               };
 static const char *mpc_next_cmd[]               = { "mpc_wrapper", "next", NULL                                                  };
 static const char *mpc_prev_cmd[]               = { "mpc_wrapper", "prev", NULL                                                  };
@@ -132,37 +133,38 @@ static Key keys[] = {
 	{ MODKEY|ShiftMask,             XK_q,      quit,           {0} },
 
 	/*  Custom key bindings */
-	{ 0,                XK_Menu,      spawn,     {.v = dmenu_open_documents_cmd }   },
-	{ ShiftMask,        XK_Menu,      spawn,     {.v = dmenu_open_downloads_cmd }   },
-	{ 0,                XK_Print,     spawn,     {.v = screenshot_cmd }             },
-	{ ShiftMask,        XK_Print,     spawn,     {.v = screenshot_interactive_cmd } },
-	{ MODKEY,           XK_F7,        spawn,     {.v = displayctl_interactive_cmd } },
-	{ MODKEY|ShiftMask, XK_F7,        spawn,     {.v = displayctl_default_cmd }     },
-	{ MODKEY,           XK_F9,        spawn,     {.v = dmenu_mount_cmd }            },
-	{ MODKEY,           XK_F10,       spawn,     {.v = dmenu_unmount_cmd }          },
-	{ MODKEY,           XK_Insert,    spawn,     {.v = show_clipboard_cmd }         },
-	{ MODKEY,           XK_Down,      spawn,     {.v = mpc_toggle_cmd }             },
-	{ MODKEY,           XK_Left,      spawn,     {.v = mpc_prev_cmd }               },
-	{ MODKEY,           XK_Right,     spawn,     {.v = mpc_next_cmd }               },
-	{ MODKEY,           XK_Up,        spawn,     {.v = mpc_stop_cmd }               },
-	{ MODKEY,           XK_c,         spawn,     {.v = calculator_cmd }             },
-	{ MODKEY,           XK_grave,     spawn,     {.v = dmenu_unicode_cmd }          },
-	{ MODKEY,           XK_equal,     spawn,     {.v = volume_inc_cmd }             },
-	{ MODKEY,           XK_minus,     spawn,     {.v = volume_dec_cmd }             },
-	{ MODKEY|ShiftMask, XK_F6,        spawn,     {.v = music_player_cmd }           },
-	{ MODKEY,           XK_F6,        spawn,     {.v = mpc_status_cmd }             },
-	{ MODKEY|ShiftMask, XK_BackSpace, spawn,     {.v = powerctl_cmd }               },
-	{ MODKEY|ShiftMask, XK_l,         spawn,     {.v = lockscreen_cmd }             },
-	{ MODKEY|ShiftMask, XK_m,         spawn,     {.v = volume_toggle_cmd }          },
-	{ MODKEY|ShiftMask, XK_equal,     spawn,     {.v = backlight_inc_cmd }          },
-	{ MODKEY|ShiftMask, XK_minus,     spawn,     {.v = backlight_dec_cmd }          },
-	{ MODKEY|ShiftMask, XK_p,         spawn,     {.v = dmenu_pass_cmd }             },
-	{ MODKEY|ShiftMask, XK_s,         spawn,     {.v = tmux_cmd }                   },
-	{ MODKEY,           XK_s,         view,      {.ui = 1 << 0}                     },
-	{ MODKEY|ShiftMask, XK_e,         spawn,     {.v = emacs_cmd }                  },
-	{ MODKEY,           XK_e,         view,      {.ui = 1 << 1}                     },
-	{ MODKEY|ShiftMask, XK_w,         spawn,     {.v = www_browser_cmd }            },
-	{ MODKEY,           XK_w,         view,      {.ui = 1 << 4}                     },
+	{ 0,                  XK_Menu,      spawn,     {.v = dmenu_open_documents_cmd }   },
+	{ ShiftMask,          XK_Menu,      spawn,     {.v = dmenu_open_downloads_cmd }   },
+	{ 0,                  XK_Print,     spawn,     {.v = screenshot_cmd }             },
+	{ ShiftMask,          XK_Print,     spawn,     {.v = screenshot_interactive_cmd } },
+	{ MODKEY,             XK_F7,        spawn,     {.v = displayctl_interactive_cmd } },
+	{ MODKEY|ShiftMask,   XK_F7,        spawn,     {.v = displayctl_default_cmd }     },
+	{ MODKEY,             XK_F9,        spawn,     {.v = dmenu_mount_cmd }            },
+	{ MODKEY,             XK_F10,       spawn,     {.v = dmenu_unmount_cmd }          },
+	{ MODKEY,             XK_Insert,    spawn,     {.v = show_clipboard_cmd }         },
+	{ MODKEY,             XK_Down,      spawn,     {.v = mpc_toggle_cmd }             },
+	{ MODKEY,             XK_Left,      spawn,     {.v = mpc_prev_cmd }               },
+	{ MODKEY,             XK_Right,     spawn,     {.v = mpc_next_cmd }               },
+	{ MODKEY,             XK_Up,        spawn,     {.v = mpc_stop_cmd }               },
+	{ MODKEY,             XK_c,         spawn,     {.v = calculator_cmd }             },
+	{ MODKEY,             XK_grave,     spawn,     {.v = dmenu_unicode_cmd }          },
+	{ MODKEY,             XK_equal,     spawn,     {.v = volume_inc_cmd }             },
+	{ MODKEY,             XK_minus,     spawn,     {.v = volume_dec_cmd }             },
+	{ MODKEY|ShiftMask,   XK_F6,        spawn,     {.v = music_player_cmd }           },
+	{ MODKEY,             XK_F6,        spawn,     {.v = mpc_status_cmd }             },
+	{ MODKEY|ShiftMask,   XK_BackSpace, spawn,     {.v = powerctl_cmd }               },
+	{ MODKEY|ShiftMask,   XK_l,         spawn,     {.v = lockscreen_cmd }             },
+	{ MODKEY|ShiftMask,   XK_m,         spawn,     {.v = volume_toggle_cmd }          },
+	{ MODKEY|ShiftMask,   XK_equal,     spawn,     {.v = backlight_inc_cmd }          },
+	{ MODKEY|ShiftMask,   XK_minus,     spawn,     {.v = backlight_dec_cmd }          },
+	{ MODKEY|ShiftMask,   XK_p,         spawn,     {.v = dmenu_pass_cmd }             },
+	{ MODKEY|ShiftMask,   XK_s,         spawn,     {.v = tmux_cmd }                   },
+	{ MODKEY,             XK_s,         view,      {.ui = 1 << 0}                     },
+	{ MODKEY|ShiftMask,   XK_e,         spawn,     {.v = emacs_cmd }                  },
+	{ MODKEY|ControlMask, XK_e,         spawn,     {.v = mail_cmd }                   },
+	{ MODKEY,             XK_e,         view,      {.ui = 1 << 1}                     },
+	{ MODKEY|ShiftMask,   XK_w,         spawn,     {.v = www_browser_cmd }            },
+	{ MODKEY,             XK_w,         view,      {.ui = 1 << 4}                     },
 };
 
 /* button definitions */
